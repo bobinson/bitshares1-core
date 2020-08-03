@@ -23,8 +23,8 @@ if( WIN32 )
 else( WIN32 )
     # Apple AND Linux Options Here
     find_package( ZLIB REQUIRED )
-    set( LEVEL_DB_DIR vendor/leveldb-1.12.0 )
-    
+    set( LEVEL_DB_DIR vendor/leveldb-1.12 )
+
     if( APPLE )
         # Apple Specific Options Here
         message( STATUS "Configuring Bitshares on OS X" )
@@ -34,6 +34,24 @@ else( WIN32 )
         message( STATUS "Configuring Bitshares on Linux" )
         set( rt_library rt )
         set( pthread_library pthread)
+
+        SET (BOOST_ROOT "/home/bkb/src/boost/boost_1_56_0")
+        SET (BOOST_INCLUDEDIR "${BOOST_ROOT}/include")
+        SET (BOOST_LIBRARYDIR "${BOOST_ROOT}/lib")
+
+        SET (BOOST_MIN_VERSION "1.50.0")
+        set (Boost_NO_BOOST_CMAKE ON)
+        FIND_PACKAGE(Boost ${BOOST_MIN_VERSION} REQUIRED)
+        if (NOT Boost_FOUND)
+            message(FATAL_ERROR "Fatal error: Boost (version >= 1.56) required.")
+        else()
+            message(STATUS "Setting up BOOST")
+            message(STATUS " Includes - ${Boost_INCLUDE_DIRS}")
+            message(STATUS " Library  - ${Boost_LIBRARY_DIRS}")
+            include_directories(${Boost_INCLUDE_DIRS})
+            link_directories(${Boost_LIBRARY_DIRS})
+        endif (NOT Boost_FOUND)
+
     endif( APPLE )
 endif( WIN32 )
 
